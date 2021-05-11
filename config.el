@@ -52,13 +52,20 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
+
 (load! "functions")
 (load! "setup-utf-chars")
 (load! "bindings")
 (load! "setup-js")
 (load! "setup-ruby")
 (load! "nas-setup-alignment")
+; (load! "css-in-js")
 
+
+;; (after! mmm-mode
+;;   (load! "css-in-js"))
+
+(add-hook 'js-mode-hook (lambda () (css-in-js-mode t)))
 (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
 (global-undo-tree-mode)
@@ -70,6 +77,8 @@
  '(package-selected-packages '(magit deadgrep ag))
  '(safe-local-variable-values '((enh-ruby-indent-level . 4) (js2-basic-offset . 4)))
  '(highlight-indent-guides-method 'character))
+
+(setq reb-re-syntax 'string)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

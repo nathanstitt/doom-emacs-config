@@ -52,6 +52,12 @@
 (package! undo-tree)
 (package! enh-ruby-mode)
 
+;(package! mmm-mode)
+(package! typescript-mode)
+(package! web-mode)
+(package! graphql-mode)
+(package! scss-mode)
+
 ;; (setq company-backends '((company-capf company-dabbrev-code company-files)))
 (add-hook 'js-mode-hook
           (lambda ()

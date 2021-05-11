@@ -5,6 +5,7 @@
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js-mode))
 (add-hook 'js-mode-hook 'js2-minor-mode)
+
 (setq js2-strict-missing-semi-warning 'nil)
 
 (add-hook! 'js2-mode-hook
@@ -41,7 +42,16 @@
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
   (setq flycheck-typescript-tslint-config 'nil)
+
+;  (add-to-list 'flycheck-checkers 'javascript-tide 'jsx-tide)
   (setq tide-completion-detailed t)
+
+  (lambda ()
+    (when (string-equal "js" (file-name-extension buffer-file-name))
+      (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)))
+  (lambda ()
+    (when (string-equal "jsx" (file-name-extension buffer-file-name))
+      (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)))
 
   ;; company is an optional dependency. You have to
   ;; install it separately via package-install
@@ -52,15 +62,31 @@
        '((company-tide company-files :with company-yasnippet)
          (company-dabbrev-code company-dabbrev))))
 
+(add-hook! 'js-mode-hook #'setup-tide-mode)
+
+; (add-hook 'js2-mode-hook #'setup-tide-mode)
+
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
 (setq sgml-basic-offset 4)
 ;; formats the buffer before saving
 ;; (add-hook 'before-save-hook 'tide-format-before-save)
 
+  ;; (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+  ;; (flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
-(add-hook 'js2-mode-hook #'setup-tide-mode)
+
+
+;(flycheck-add-mode 'javascript-tide 'jsx-tide)
+
+
+; (flycheck-add-mode 'typescript-tslint 'web-mode)
+; (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+;(flycheck-add-next-checker 'javascript-eslint 'jsx-tide 'append)
+;(flycheck-add-next-checker 'javascript-eslint 'tsx-tide 'append)
+
 
 ;; (require 'web-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
@@ -69,4 +95,3 @@
 ;;             (when (string-equal "tsx" (file-name-extension buffer-file-name))
 ;;               (setup-tide-mode))))
 ;; ;; enable typescript-tslint checker
-;; (flycheck-add-mode 'typescript-tslint 'web-mode)
