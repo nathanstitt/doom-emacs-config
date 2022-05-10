@@ -1,5 +1,10 @@
 (require 'flycheck)
 
+;; (flycheck-add-mode 'typescript-tslint 'typescript-tsx-mode)
+;; (flycheck-add-next-checker 'lsp 'typescript-tslint 'append)
+
+;; (require 'tsx-mode)
+
 (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js-mode))
@@ -17,7 +22,7 @@
     (format-all-mode -1)))
 
 
-(add-hook! 'js-mode-hook #'(flycheck-mode rainbow-delimiters-mode))
+;; (add-hook! 'js-mode-hook #'(flycheck-mode rainbow-delimiters-mode))
 
 ;; If it's available globally, use eslint_d
 (setq flycheck-javascript-eslint-executable (executable-find "eslint_d"))
@@ -79,6 +84,8 @@
 
 
 
+
+
 ;(flycheck-add-mode 'javascript-tide 'jsx-tide)
 
 
@@ -95,3 +102,4 @@
 ;;             (when (string-equal "tsx" (file-name-extension buffer-file-name))
 ;;               (setup-tide-mode))))
 ;; ;; enable typescript-tslint checker
+
