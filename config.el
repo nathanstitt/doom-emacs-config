@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "Nathan Stitt"
-      user-mail-address "nathan@stitt.org")
+;; (setq user-full-name "John Doe"
+;;       user-mail-address "john@doe.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -15,7 +15,7 @@
 ;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
 ;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
-;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-symbol-font' -- for symbols
 ;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
@@ -33,8 +33,6 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one)
-
-(setq doom-font (font-spec :family "monospace" :size 16))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -77,22 +75,22 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq doom-modeline-buffer-file-name-style 'truncate-all)
-(setq doom-modeline-vcs-max-length 15)
 
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-file-watch-ignored-directories "node_modules" "DerivedData"))
-  ;; or
-;  (add-to-list 'lsp-file-watch-ignored-files "[/\\\\]\\.my-files\\'"))
+(defun nas-load-all-elisp-in-directory (dir &optional force)
+  "Load all `.el` or `.elc` files in DIR, unless already loaded.
+With FORCE non-nil, always reload."
+  (interactive "DDirectory with .el/.elc files: \nP")
+  (let ((loaded-libraries (mapcar #'file-name-sans-extension
+                                  (mapcar #'car load-history))))
+    (dolist (file (directory-files dir t "\\.elc?$"))
+      (when (file-regular-p file)
+        (let ((lib (file-name-sans-extension file)))
+          (when (or force (not (member lib loaded-libraries)))
+            (load lib nil 'nomessage)))))))
 
-(load! "setup-typescript")
-(load! "setup-flycheck")
-(load! "functions")
-(load! "bindings")
-(load! "setup-utf-chars")
+
+(nas-load-all-elisp-in-directory
+ (expand-file-name "nas" (file-name-directory (or load-file-name buffer-file-name))))
 
 
-(setq +format-on-save-enabled-modes
-      '(not emacs-lisp-mode  ; elisp's mechanisms are good enough
-            sql-mode         ; sqlformat is currently broken
-            mhtml-mode))
+(setq projectile-enable-caching nil)
